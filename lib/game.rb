@@ -1,24 +1,10 @@
 require_relative './board'
 require_relative './vector'
+require_relative './horizontal_sequence'
+require_relative './vertical_sequence'
 require_relative './ship'
 
 class Game
-  class VerticalSequence
-    def self.transform(size)
-      size.times.map do |i|
-        Vector.new(x: 0, y: i)
-      end
-    end
-  end
-
-  class HorizontalSequence
-    def self.transform(size)
-      size.times.map do |i|
-        Vector.new(x: i, y: 0)
-      end
-    end
-  end
-
   def initialize
     @board = Board.new(size: 10)
     @ships = []
@@ -30,13 +16,10 @@ class Game
 
   def place_ship(size:, top_left:, sequence:)
     return :fail if invalid_placement?(size: size, top_left: top_left, sequence: sequence)
-    ship_vectors = []
-    sequence.transform(size).each do |offset|
-      vector = top_left + offset
-      ship_vectors << vector
+    @ships << Ship.new(size: size, top_left: top_left, sequence: sequence)
+    @ships.last.segments.each do |vector|
       @board.set(vector: vector, to: "S")
     end
-    @ships << Ship.new(ship_vectors)
   end
 
   def fire(vector)
@@ -48,8 +31,7 @@ class Game
 
   def invalid_placement?(size:, top_left:, sequence:)
     sequence.transform(size).any? do |offset|
-      vector = top_left + offset
-      !@board.valid_position?(vector)
+      !@board.valid_position?(top_left + offset)
     end
   end
 end
