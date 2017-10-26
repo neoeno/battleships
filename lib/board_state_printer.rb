@@ -1,6 +1,6 @@
 require_relative './vector'
 
-class BoardPrinter
+class BoardStatePrinter
   def initialize(board:, ships:)
     @board = board
     @ships = ships

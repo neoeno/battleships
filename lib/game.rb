@@ -1,5 +1,5 @@
 require_relative './board'
-require_relative './board_printer'
+require_relative './board_state_printer'
 require_relative './vector'
 require_relative './horizontal_sequence'
 require_relative './vertical_sequence'
@@ -12,8 +12,8 @@ class Game
   end
 
   def print_board
-    board_printer = BoardPrinter.new(board: @board, ships: @ships)
-    board_printer.print
+    board_state_printer = BoardStatePrinter.new(board: @board, ships: @ships)
+    board_state_printer.print
   end
 
   def place_ship(size:, top_left:, sequence:)
