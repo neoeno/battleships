@@ -1,19 +1,22 @@
+require_relative './board'
+
 class Game
   def initialize
-    @board = (("." * 10) + "\n") * 10
+    @board = Board.new(size: 10)
   end
 
   def print_board
-    @board
+    @board.print
   end
 
   def place_ship(size:, x:, y:, orientation:)
-    top_left = y * 11 + x
-    if orientation == :horizontal
-      @board[top_left...top_left + size] = "S" * size
+    if orientation == :vertical
+      size.times do |i|
+        @board.set(x: x, y: y + i, to: "S")
+      end
     else
       size.times do |i|
-        @board[top_left + (i * 11)] = "S"
+        @board.set(x: x + i, y: y, to: "S")
       end
     end
   end
