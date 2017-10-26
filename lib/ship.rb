@@ -23,4 +23,10 @@ class Ship
       @top_left + offset
     end
   end
+
+  def at?(position)
+    segments.any? do |segment|
+      segment == position
+    end
+  end
 end
