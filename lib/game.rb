@@ -33,6 +33,12 @@ class Game
     end
   end
 
+  def print_ships_report
+    @ships.select(&:sunk?).map do |ship|
+      "Ship of length #{ship.size} is sunk"
+    end.join("\n")
+  end
+
   private
 
   def invalid_placement?(ship)

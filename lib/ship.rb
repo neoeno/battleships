@@ -1,6 +1,8 @@
 require 'set'
 
 class Ship
+  attr_reader :size
+  
   def initialize(size:, top_left:, sequence:)
     @size = size
     @top_left = top_left
@@ -11,7 +13,7 @@ class Ship
   def fire(firing_vector)
     return :miss unless at?(firing_vector)
     @bombed << firing_vector
-    return :sunk if @bombed.length == segments.length
+    return :sunk if sunk?
     return :hit
   end
 
@@ -23,5 +25,9 @@ class Ship
 
   def at?(position)
     segments.include?(position)
+  end
+
+  def sunk?
+    @bombed.length == segments.length
   end
 end

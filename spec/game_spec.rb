@@ -156,4 +156,23 @@ RSpec.describe Game do
     expect(result).to eq :fail
     expect(game.print_board).to eq saved_board
   end
+
+  it "shows you which ships are sunk" do
+    game = Game.new
+    game.place_ship(size: 2, top_left: Vector.new(x: 0, y: 0), sequence: HorizontalSequence)
+    game.place_ship(size: 3, top_left: Vector.new(x: 0, y: 1), sequence: HorizontalSequence)
+    game.place_ship(size: 3, top_left: Vector.new(x: 0, y: 2), sequence: HorizontalSequence)
+    game.place_ship(size: 4, top_left: Vector.new(x: 0, y: 3), sequence: HorizontalSequence)
+    game.place_ship(size: 5, top_left: Vector.new(x: 0, y: 4), sequence: HorizontalSequence)
+    game.fire(Vector.new(x: 0, y: 0))
+    game.fire(Vector.new(x: 1, y: 0))
+    game.fire(Vector.new(x: 0, y: 3))
+    game.fire(Vector.new(x: 1, y: 3))
+    game.fire(Vector.new(x: 2, y: 3))
+    game.fire(Vector.new(x: 3, y: 3))
+    expect(game.print_ships_report).to eq(
+      "Ship of length 2 is sunk\n" +
+      "Ship of length 4 is sunk"
+    )
+  end
 end
