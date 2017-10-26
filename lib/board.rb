@@ -11,9 +11,9 @@ class Board
   end
 
   def all_vectors
-    @size.times.reduce([]) do |acc, y|
-      @size.times.reduce(acc) do |acc, x|
-        [*acc, Vector.new(x: x, y: y)]
+    @size.times.flat_map do |y|
+      @size.times.map do |x|
+        Vector.new(x: x, y: y)
       end
     end
   end

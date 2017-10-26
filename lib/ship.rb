@@ -9,11 +9,8 @@ class Ship
   end
 
   def fire(firing_vector)
-    hit_segment = segments.find do |segment|
-      segment == firing_vector
-    end
-    return :miss unless hit_segment
-    @bombed << hit_segment
+    return :miss unless at?(firing_vector)
+    @bombed << firing_vector
     return :sunk if @bombed.length == segments.length
     return :hit
   end
@@ -25,8 +22,6 @@ class Ship
   end
 
   def at?(position)
-    segments.any? do |segment|
-      segment == position
-    end
+    segments.include?(position)
   end
 end
