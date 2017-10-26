@@ -1,15 +1,7 @@
 require_relative './board'
+require_relative './vector'
 
 class Game
-  class Vector
-    def initialize(x:, y:)
-      @x = x
-      @y = y
-    end
-
-    attr_reader :x, :y
-  end
-
   class VerticalSequence
     def self.transform(size)
       size.times.map do |i|
@@ -26,6 +18,22 @@ class Game
     end
   end
 
+  class Ship
+    def initialize(vectors)
+      @vectors = vectors
+    end
+
+    def fire(x:, y:)
+      vector = @vectors.find do |vector|
+        vector.x == x && vector.y == y
+      end
+      return :miss unless vector
+      @vectors.delete(vector)
+      return :sunk if @vectors.empty?
+      return :hit
+    end
+  end
+
   def initialize
     @board = Board.new(size: 10)
     @ships = []
@@ -37,38 +45,28 @@ class Game
 
   def place_ship(size:, x:, y:, sequence:)
     return :fail if invalid_placement?(size: size, x: x, y: y, sequence: sequence)
-    ship_cells = []
-    sequence.transform(size).each do |vector|
-      ship_cells << [x + vector.x, y + vector.y]
-      @board.set(x: x + vector.x, y: y + vector.y, to: "S")
+    ship_vectors = []
+    top_left = Vector.new(x: x, y: y)
+    sequence.transform(size).each do |offset|
+      vector = top_left + offset
+      ship_vectors << vector
+      @board.set(vector: vector, to: "S")
     end
-    @ships << ship_cells
+    @ships << Ship.new(ship_vectors)
   end
 
   def fire(x:, y:)
-    if @board.cell_is?(x: x, y: y, value: "S")
-      return :sunk if fire_sinks_battleship?(x: x, y: y)
-      return :hit
+    @ships.reduce(:miss) do |status, ship|
+      next status unless status == :miss
+      ship.fire(x: x, y: y)
     end
-    return :miss
-  end
-
-  private
-
-  def fire_sinks_battleship?(x:, y:)
-    @ships.each do |ship_coords|
-      ship_coords.reject! do |coord|
-        coord[0] == x && coord[1] == y
-      end
-    end
-    return false unless @ships.find(&:empty?)
-    @ships.reject!(&:empty?)
-    return true
   end
 
   def invalid_placement?(size:, x:, y:, sequence:)
-    sequence.transform(size).any? do |vector|
-      !@board.valid_position?(x: x + vector.x, y: y + vector.y)
+    top_left = Vector.new(x: x, y: y)
+    sequence.transform(size).any? do |offset|
+      vector = top_left + offset
+      !@board.valid_position?(vector)
     end
   end
 end

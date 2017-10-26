@@ -1,26 +1,28 @@
+require_relative './vector'
+
 class Board
   def initialize(size:)
     @size = size
     @cells = []
   end
 
-  def set(x:, y:, to:)
-    @cells << Cell.new(x: x, y: y, value: to)
+  def set(vector:, to:)
+    @cells << Cell.new(vector: vector, value: to)
   end
 
   def print
-    rows.map do |row|
-      row.map(&:value).join
+    rows.map do |cells|
+      cells.map(&:value).join
     end.join("\n")
   end
 
-  def valid_position?(x:, y:)
+  def valid_position?(vector)
     valid_range = (0...@size)
-    valid_range.cover?(x) && valid_range.cover?(y)
+    valid_range.cover?(vector.x) && valid_range.cover?(vector.y)
   end
 
-  def cell_is?(x:, y:, value:)
-    get_cell(x: x, y: y).value == value
+  def cell_is?(vector:, value:)
+    get_cell(vector).value == value
   end
 
   private
@@ -30,35 +32,34 @@ class Board
   end
 
   def all_cells
-    all_coordinates.map do |x, y|
-      get_cell(x: x, y: y)
+    all_coordinates.map do |vector|
+      get_cell(vector)
     end
   end
 
   def all_coordinates
     @size.times.reduce([]) do |acc, y|
       @size.times.reduce(acc) do |acc, x|
-        [*acc, [x, y]]
+        [*acc, Vector.new(x: x, y: y)]
       end
     end
   end
 
-  def get_cell(x:, y:)
-    blank_cell = Cell.new(x: x, y: y, value: ".")
+  def get_cell(vector)
+    blank_cell = Cell.new(vector: vector, value: ".")
     @cells.find do |cell|
-      cell.at?(x: x, y: y)
+      cell.at?(vector)
     end || blank_cell
   end
 
   class Cell
-    def initialize(x:, y:, value:)
-      @x = x
-      @y = y
+    def initialize(vector:, value:)
+      @vector = vector
       @value = value
     end
 
-    def at?(x:, y:)
-      @x == x && @y == y
+    def at?(vector)
+      @vector.x == vector.x && @vector.y == vector.y
     end
 
     def value
