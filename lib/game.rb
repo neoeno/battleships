@@ -36,8 +36,21 @@ class Game
   private
 
   def invalid_placement?(ship)
-    return :fail unless ship.segments.all? do |segment|
+    return :fail unless ship_within_board?(ship)
+    return :fail if ship_overlaps_with_other_ships?(ship)
+  end
+
+  def ship_within_board?(ship)
+    ship.segments.all? do |segment|
       @board.valid_position?(segment)
+    end
+  end
+
+  def ship_overlaps_with_other_ships?(ship)
+    ship.segments.any? do |segment|
+      @ships.any? do |ship|
+        ship.at?(segment)
+      end
     end
   end
 end

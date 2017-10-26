@@ -140,9 +140,20 @@ RSpec.describe Game do
     game.place_ship(size: 3, top_left: Vector.new(x: 0, y: 2), sequence: HorizontalSequence)
     game.place_ship(size: 4, top_left: Vector.new(x: 0, y: 3), sequence: HorizontalSequence)
     game.place_ship(size: 5, top_left: Vector.new(x: 0, y: 4), sequence: HorizontalSequence)
+    saved_board = game.print_board
     10.times do |i|
       result = game.place_ship(size: i, top_left: Vector.new(x: 0, y: 5), sequence: HorizontalSequence)
       expect(result).to eq :fail
     end
+    expect(game.print_board).to eq saved_board
+  end
+
+  it "does not let ships overlap" do
+    game = Game.new
+    game.place_ship(size: 2, top_left: Vector.new(x: 0, y: 2), sequence: HorizontalSequence)
+    saved_board = game.print_board
+    result = game.place_ship(size: 3, top_left: Vector.new(x: 0, y: 0), sequence: VerticalSequence)
+    expect(result).to eq :fail
+    expect(game.print_board).to eq saved_board
   end
 end
