@@ -20,7 +20,7 @@ RSpec.describe Game do
 
   it "places a 1x1 ship" do
     game = Game.new
-    game.place_ship(size: 1, x: 0, y: 0, orientation: :horizontal)
+    game.place_ship(size: 1, x: 0, y: 0, sequence: Game::HorizontalSequence)
     board = game.print_board
     expect(board).to eq(
       "S.........\n" +
@@ -38,7 +38,7 @@ RSpec.describe Game do
 
   it "places a 1x1 ship offset by 1 row" do
     game = Game.new
-    game.place_ship(size: 1, x: 0, y: 1, orientation: :horizontal)
+    game.place_ship(size: 1, x: 0, y: 1, sequence: Game::HorizontalSequence)
     board = game.print_board
     expect(board).to eq(
       "..........\n" +
@@ -56,7 +56,7 @@ RSpec.describe Game do
 
   it "places a 1x3 ship horizontally" do
     game = Game.new
-    game.place_ship(size: 3, x: 0, y: 0, orientation: :horizontal)
+    game.place_ship(size: 3, x: 0, y: 0, sequence: Game::HorizontalSequence)
     board = game.print_board
     expect(board).to eq(
       "SSS.......\n" +
@@ -74,7 +74,7 @@ RSpec.describe Game do
 
   it "places a 1x3 ship vertically" do
     game = Game.new
-    game.place_ship(size: 3, x: 0, y: 0, orientation: :vertical)
+    game.place_ship(size: 3, x: 0, y: 0, sequence: Game::VerticalSequence)
     board = game.print_board
     expect(board).to eq(
       "S.........\n" +
