@@ -122,4 +122,14 @@ RSpec.describe Game do
     result = game.fire(x: 0, y: 3)
     expect(result).to eq :miss
   end
+
+  it "lets you know whether your missiles sink a ship" do
+    game = Game.new
+    game.place_ship(size: 3, x: 0, y: 0, sequence: Game::VerticalSequence)
+    results = []
+    results << game.fire(x: 0, y: 0)
+    results << game.fire(x: 0, y: 1)
+    results << game.fire(x: 0, y: 2)
+    expect(results).to eq [:hit, :hit, :sunk]
+  end
 end
