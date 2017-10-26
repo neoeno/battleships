@@ -18,12 +18,12 @@ RSpec.describe Game do
     )
   end
 
-  it "places a 1x1 ship" do
+  it "places a 2x1 ship" do
     game = Game.new
-    game.place_ship(size: 1, top_left: Vector.new(x: 0, y: 0), sequence: HorizontalSequence)
+    game.place_ship(size: 2, top_left: Vector.new(x: 0, y: 0), sequence: HorizontalSequence)
     board = game.print_board
     expect(board).to eq(
-      "S.........\n" +
+      "SS........\n" +
       "..........\n" +
       "..........\n" +
       "..........\n" +
@@ -36,13 +36,13 @@ RSpec.describe Game do
     )
   end
 
-  it "places a 1x1 ship offset by 1 row" do
+  it "places a 2x1 ship offset by 1 row" do
     game = Game.new
-    game.place_ship(size: 1, top_left: Vector.new(x: 0, y: 1), sequence: HorizontalSequence)
+    game.place_ship(size: 2, top_left: Vector.new(x: 0, y: 1), sequence: HorizontalSequence)
     board = game.print_board
     expect(board).to eq(
       "..........\n" +
-      "S.........\n" +
+      "SS........\n" +
       "..........\n" +
       "..........\n" +
       "..........\n" +
@@ -131,5 +131,18 @@ RSpec.describe Game do
     results << game.fire(Vector.new(x: 0, y: 1))
     results << game.fire(Vector.new(x: 0, y: 2))
     expect(results).to eq [:hit, :hit, :sunk]
+  end
+
+  it "lets you place only the allowed ships" do
+    game = Game.new
+    game.place_ship(size: 2, top_left: Vector.new(x: 0, y: 0), sequence: HorizontalSequence)
+    game.place_ship(size: 3, top_left: Vector.new(x: 0, y: 1), sequence: HorizontalSequence)
+    game.place_ship(size: 3, top_left: Vector.new(x: 0, y: 2), sequence: HorizontalSequence)
+    game.place_ship(size: 4, top_left: Vector.new(x: 0, y: 3), sequence: HorizontalSequence)
+    game.place_ship(size: 5, top_left: Vector.new(x: 0, y: 4), sequence: HorizontalSequence)
+    10.times do |i|
+      result = game.place_ship(size: i, top_left: Vector.new(x: 0, y: 5), sequence: HorizontalSequence)
+      expect(result).to eq :fail
+    end
   end
 end

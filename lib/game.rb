@@ -6,9 +6,11 @@ require_relative './vertical_sequence'
 require_relative './ship'
 
 class Game
+
   def initialize
     @board = Board.new(size: 10)
     @ships = []
+    @available_ship_sizes = [5, 4, 3, 3, 2]
   end
 
   def print_board
@@ -17,8 +19,10 @@ class Game
   end
 
   def place_ship(size:, top_left:, sequence:)
+    return :fail unless @available_ship_sizes.include? size
     ship = Ship.new(size: size, top_left: top_left, sequence: sequence)
     return :fail if invalid_placement?(ship)
+    @available_ship_sizes.delete_at(@available_ship_sizes.index(size))
     @ships << ship
   end
 
