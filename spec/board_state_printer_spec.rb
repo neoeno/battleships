@@ -48,11 +48,4 @@ RSpec.describe BoardStatePrinter do
       "..S"
     )
   end
-
-  it "tells you whether cells are what you think" do
-    board_state_printer = BoardStatePrinter.new(board: board, ships: [
-      Ship.new(size: 3, top_left: Vector.new(x: 0, y: 1), sequence: HorizontalSequence)
-    ])
-    expect(board_state_printer.cell_is?(vector: Vector.new(x: 1, y: 1), value: "S")).to eq true
-  end
 end

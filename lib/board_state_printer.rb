@@ -11,11 +11,7 @@ class BoardStatePrinter
       cells.join
     end.join("\n")
   end
-
-  def cell_is?(vector:, value:)
-    get_cell(vector) == value
-  end
-
+  
   private
 
   def rows
