@@ -41,6 +41,11 @@ class Game
     end
   end
 
+  def fire(x:, y:)
+    return :hit if @board.cell_is?(x: x, y: y, value: "S")
+    return :miss
+  end
+
   private
 
   def invalid_placement?(size:, x:, y:, sequence:)

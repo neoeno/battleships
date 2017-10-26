@@ -108,4 +108,18 @@ RSpec.describe Game do
       ".........."
     )
   end
+
+  it "lets you know whether your missiles hit" do
+    game = Game.new
+    game.place_ship(size: 3, x: 0, y: 0, sequence: Game::VerticalSequence)
+    result = game.fire(x: 0, y: 1)
+    expect(result).to eq :hit
+  end
+
+  it "lets you know whether your missiles miss" do
+    game = Game.new
+    game.place_ship(size: 3, x: 0, y: 0, sequence: Game::VerticalSequence)
+    result = game.fire(x: 0, y: 3)
+    expect(result).to eq :miss
+  end
 end

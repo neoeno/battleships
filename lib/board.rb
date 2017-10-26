@@ -19,6 +19,10 @@ class Board
     valid_range.cover?(x) && valid_range.cover?(y)
   end
 
+  def cell_is?(x:, y:, value:)
+    get_cell(x: x, y: y).value == value
+  end
+
   private
 
   def rows

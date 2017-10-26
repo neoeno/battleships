@@ -51,4 +51,10 @@ RSpec.describe Board do
     expect(board.valid_position?(x: 3, y: 3)).to eq false
     expect(board.valid_position?(x: -1, y: 0)).to eq false
   end
+
+  it "tells you whether cells are what you think" do
+    board = Board.new(size: 3)
+    board.set(x: 1, y: 1, to: "S")
+    expect(board.cell_is?(x: 1, y: 1, value: "S")).to eq true
+  end
 end
