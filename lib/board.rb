@@ -32,12 +32,12 @@ class Board
   end
 
   def all_cells
-    all_coordinates.map do |vector|
+    all_vectors.map do |vector|
       get_cell(vector)
     end
   end
 
-  def all_coordinates
+  def all_vectors
     @size.times.reduce([]) do |acc, y|
       @size.times.reduce(acc) do |acc, x|
         [*acc, Vector.new(x: x, y: y)]

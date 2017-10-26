@@ -20,16 +20,16 @@ class Game
 
   class Ship
     def initialize(vectors)
-      @vectors = vectors
+      @ship_vectors = vectors
     end
 
-    def fire(x:, y:)
-      vector = @vectors.find do |vector|
-        vector.x == x && vector.y == y
+    def fire(firing_vector)
+      hit_ship_vector = @ship_vectors.find do |ship_vector|
+        ship_vector == firing_vector
       end
-      return :miss unless vector
-      @vectors.delete(vector)
-      return :sunk if @vectors.empty?
+      return :miss unless hit_ship_vector
+      @ship_vectors.delete(hit_ship_vector)
+      return :sunk if @ship_vectors.empty?
       return :hit
     end
   end
@@ -43,10 +43,9 @@ class Game
     @board.print
   end
 
-  def place_ship(size:, x:, y:, sequence:)
-    return :fail if invalid_placement?(size: size, x: x, y: y, sequence: sequence)
+  def place_ship(size:, top_left:, sequence:)
+    return :fail if invalid_placement?(size: size, top_left: top_left, sequence: sequence)
     ship_vectors = []
-    top_left = Vector.new(x: x, y: y)
     sequence.transform(size).each do |offset|
       vector = top_left + offset
       ship_vectors << vector
@@ -55,15 +54,14 @@ class Game
     @ships << Ship.new(ship_vectors)
   end
 
-  def fire(x:, y:)
+  def fire(vector)
     @ships.reduce(:miss) do |status, ship|
       next status unless status == :miss
-      ship.fire(x: x, y: y)
+      ship.fire(vector)
     end
   end
 
-  def invalid_placement?(size:, x:, y:, sequence:)
-    top_left = Vector.new(x: x, y: y)
+  def invalid_placement?(size:, top_left:, sequence:)
     sequence.transform(size).any? do |offset|
       vector = top_left + offset
       !@board.valid_position?(vector)
