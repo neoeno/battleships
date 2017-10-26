@@ -15,8 +15,9 @@ class Game
   end
 
   def place_ship(size:, top_left:, sequence:)
-    return :fail if invalid_placement?(size: size, top_left: top_left, sequence: sequence)
-    @ships << Ship.new(size: size, top_left: top_left, sequence: sequence)
+    ship = Ship.new(size: size, top_left: top_left, sequence: sequence)
+    return :fail if invalid_placement?(ship)
+    @ships << ship
     @ships.last.segments.each do |vector|
       @board.set(vector: vector, to: "S")
     end
@@ -29,9 +30,9 @@ class Game
     end
   end
 
-  def invalid_placement?(size:, top_left:, sequence:)
-    sequence.transform(size).any? do |offset|
-      !@board.valid_position?(top_left + offset)
+  def invalid_placement?(ship)
+    return :fail unless ship.segments.all? do |segment|
+      @board.valid_position?(segment)
     end
   end
 end
