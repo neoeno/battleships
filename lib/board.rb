@@ -14,6 +14,11 @@ class Board
     end.join("\n")
   end
 
+  def valid_position?(x:, y:)
+    valid_range = (0...@size)
+    valid_range.cover?(x) && valid_range.cover?(y)
+  end
+
   private
 
   def rows

@@ -89,4 +89,23 @@ RSpec.describe Game do
       ".........."
     )
   end
+
+  it "forbids ship placement off the edges of the board" do
+    game = Game.new
+    placement_status = game.place_ship(size: 3, x: 0, y: 9, sequence: Game::VerticalSequence)
+    board = game.print_board
+    expect(placement_status).to eq :fail
+    expect(board).to eq(
+      "..........\n" +
+      "..........\n" +
+      "..........\n" +
+      "..........\n" +
+      "..........\n" +
+      "..........\n" +
+      "..........\n" +
+      "..........\n" +
+      "..........\n" +
+      ".........."
+    )
+  end
 end

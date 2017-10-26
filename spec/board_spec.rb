@@ -39,4 +39,16 @@ RSpec.describe Board do
       "..."
     )
   end
+
+  it "reports invalid positions" do
+    board = Board.new(size: 3)
+    expect(board.valid_position?(x: 0, y: 0)).to eq true
+    expect(board.valid_position?(x: 2, y: 0)).to eq true
+    expect(board.valid_position?(x: 2, y: 2)).to eq true
+    expect(board.valid_position?(x: 0, y: 2)).to eq true
+    expect(board.valid_position?(x: 0, y: 3)).to eq false
+    expect(board.valid_position?(x: 3, y: 0)).to eq false
+    expect(board.valid_position?(x: 3, y: 3)).to eq false
+    expect(board.valid_position?(x: -1, y: 0)).to eq false
+  end
 end
